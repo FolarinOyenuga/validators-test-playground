@@ -1,6 +1,7 @@
 terraform {
-  backend "s3" {
-  }
+  # Backend commented out for local testing
+  # backend "s3" {
+  # }
 }
 
 provider "aws" {
