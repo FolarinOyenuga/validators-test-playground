@@ -4,6 +4,12 @@ variable "application" {
   default     = "Tag Validation Test"
 }
 
+variable "namespace" {
+  description = "Name of the namespace these resources are part of"
+  type        = string
+  default     = "tag-test-namespace-dev"
+}
+
 variable "business_unit" {
   description = "One of: HMPPS, OPG, LAA, Central Digital, Technology Services, HMCTS, CICA, OCTO"
   type        = string
@@ -14,6 +20,12 @@ variable "service_area" {
   description = "Full name of the Service Area in which your team is based"
   type        = string
   default     = "Cloud Optimisation and Accountability"
+}
+
+variable "team_name" {
+  description = "Name of the development team responsible for this service"
+  type        = string
+  default     = "cloud-optimisation"
 }
 
 variable "environment" {
@@ -40,3 +52,20 @@ variable "owner" {
   default     = "cloud-optimisation: cloud-optimisation@digital.justice.gov.uk"
 }
 
+variable "slack_channel" {
+  description = "Slack channel name for your team"
+  type        = string
+  default     = "cloud-optimisation"
+}
+
+variable "github_owner" {
+  description = "The GitHub organization or individual user account containing the app's code repo"
+  type        = string
+  default     = "ministryofjustice"
+}
+
+variable "github_token" {
+  type        = string
+  description = "Required by the GitHub Terraform provider"
+  default     = ""
+}
