@@ -27,7 +27,7 @@ jobs:
             is-production
             service-area
             environment-name
-          soft_fail: true
+          soft_fail: false
 
       - name: Post Checkov Results
         if: always() && github.event_name == 'pull_request'
@@ -64,7 +64,7 @@ jobs:
             is-production
             service-area
             environment-name
-          soft_fail: true
+          soft_fail: false
 
       - name: Post OPA Results
         if: always() && github.event_name == 'pull_request'
