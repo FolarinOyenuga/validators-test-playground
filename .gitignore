@@ -14,3 +14,6 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# Internal documentation (not for public repo)
+VALIDATOR_CUSTOMIZATIONS.md

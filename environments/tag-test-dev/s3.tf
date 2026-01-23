@@ -1,23 +1,42 @@
-resource "aws_s3_bucket" "test_bucket" {
-  bucket = "tag-validator-test-bucket"
+# TEST CASE 1: Module with ALL required tags (should PASS)
+module "compliant_bucket" {
+  source = "./modules/s3-bucket"
+
+  bucket_name            = "coat-compliant-test-bucket"
+  application            = var.application
+  business_unit          = var.business_unit
+  environment_name       = var.environment
+  infrastructure_support = var.infrastructure_support
+  is_production          = var.is_production
+  namespace              = var.namespace
+  owner                  = var.owner
+  service_area           = var.service_area
+  team_name              = var.team_name
+}
+
+# TEST CASE 2: Module with MISSING required tags (should FAIL)
+# Missing: owner, service_area
+module "non_compliant_bucket" {
+  source = "./modules/s3-bucket"
+
+  bucket_name            = "coat-non-compliant-test-bucket"
+  application            = var.application
+  business_unit          = var.business_unit
+  environment_name       = var.environment
+  infrastructure_support = var.infrastructure_support
+  is_production          = var.is_production
+  namespace              = var.namespace
+  owner                  = ""  # Empty - should fail
+  service_area           = ""  # Empty - should fail
+  team_name              = var.team_name
+}
+
+# TEST CASE 3: Direct resource with missing tags (should FAIL)
+# Tests that validators catch both module AND direct resource issues
+resource "aws_s3_bucket" "direct_bucket_no_tags" {
+  bucket = "coat-direct-no-tags-bucket"
 
   tags = {
-    Name = "Test Bucket"
+    Name = "Direct bucket with missing required tags"
   }
-}
-
-resource "aws_s3_bucket_versioning" "test_bucket" {
-  bucket = aws_s3_bucket.test_bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "test_bucket" {
-  bucket = aws_s3_bucket.test_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
