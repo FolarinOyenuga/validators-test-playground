@@ -26,7 +26,7 @@ jobs:
             owner
             is-production
             service-area
-            environment
+            environment-name
           soft_fail: true
 
       - name: Post Checkov Results
@@ -63,7 +63,7 @@ jobs:
             owner
             is-production
             service-area
-            environment
+            environment-name
           soft_fail: true
 
       - name: Post OPA Results
