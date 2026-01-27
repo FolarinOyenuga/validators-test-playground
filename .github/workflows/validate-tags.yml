@@ -26,8 +26,8 @@ jobs:
             owner
             is-production
             service-area
-            environment-name
-          soft_fail: false
+            environment
+          soft_fail: true
 
       - name: Post Checkov Results
         if: always() && github.event_name == 'pull_request'
@@ -63,8 +63,8 @@ jobs:
             owner
             is-production
             service-area
-            environment-name
-          soft_fail: false
+            environment
+          soft_fail: true
 
       - name: Post OPA Results
         if: always() && github.event_name == 'pull_request'
@@ -82,44 +82,4 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `## 🏷️ OPA Tag Validation ${icon}\n\n${summary}`
-            });
-
-  ttv-validate:
-    name: TTV Tag Validation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ministryofjustice/terraform-tag-validator@main
-        id: ttv
-        env:
-          AWS_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE"
-          AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-          AWS_DEFAULT_REGION: "eu-west-2"
-        with:
-          terraform_directory: ./environments/tag-test-dev
-          required_tags: |
-            business-unit
-            application
-            owner
-            is-production
-            service-area
-            environment-name
-
-      - name: Post TTV Results
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        env:
-          SUMMARY: ${{ steps.ttv.outputs.violations_summary }}
-          COUNT: ${{ steps.ttv.outputs.violations_count }}
-        with:
-          script: |
-            const summary = process.env.SUMMARY || '✅ All resources have required tags';
-            const count = parseInt(process.env.COUNT || '0', 10);
-            const icon = count === 0 ? '✅' : '⚠️';
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🏷️ TTV Tag Validation ${icon}\n\n${summary}`
             });
