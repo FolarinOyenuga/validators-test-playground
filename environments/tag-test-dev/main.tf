@@ -1,6 +1,7 @@
 terraform {
-  backend "s3" {
-  }
+  # Backend commented out for CI - validators use dummy credentials
+  # backend "s3" {
+  # }
 }
 
 provider "aws" {
