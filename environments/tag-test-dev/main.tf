@@ -7,6 +7,11 @@ terraform {
 provider "aws" {
   region = "eu-west-2"
 
+  # Skip credential validation for CI with dummy credentials
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+
   default_tags {
     tags = {
       application            = var.application
@@ -24,6 +29,11 @@ provider "aws" {
 provider "aws" {
   alias  = "london"
   region = "eu-west-2"
+
+  # Skip credential validation for CI with dummy credentials
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
 
   default_tags {
     tags = {
