@@ -1,4 +1,5 @@
 # Compliant S3 bucket - inherits all required tags from provider default_tags
+# Testing checkov-tag-validator v1 release
 resource "aws_s3_bucket" "compliant_bucket" {
   bucket = "tag-test-compliant-bucket-demo"
 }
