@@ -1,4 +1,5 @@
 # Compliant S3 bucket - inherits all required tags from provider default_tags
+# Test: Verifying README instructions work correctly
 resource "aws_s3_bucket" "compliant_bucket" {
   bucket = "tag-test-compliant-bucket-demo"
 }
