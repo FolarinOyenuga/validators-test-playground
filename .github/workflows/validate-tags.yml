@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: FolarinOyenuga/checkov-tag-validator@main
+      - uses: FolarinOyenuga/checkov-tag-validator@v1
         id: checkov
         with:
           terraform_directory: ./environments/tag-test-dev
