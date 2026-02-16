@@ -1,23 +1,87 @@
+# =============================================================================
+# ORIGINAL CONFIG (commented out for testing README instructions)
+# =============================================================================
+# name: Validate Tags
+#
+# on:
+#   pull_request:
+#     paths:
+#       - 'environments/**/*.tf'
+#
+# permissions:
+#   contents: read
+#   pull-requests: write
+#
+# jobs:
+#   checkov-validate:
+#     name: Checkov Tag Validation
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#
+#       - uses: FolarinOyenuga/checkov-tag-validator@v1
+#         id: checkov
+#         with:
+#           terraform_directory: ./environments/tag-test-dev
+#           required_tags: |
+#             business-unit
+#             application
+#             owner
+#             is-production
+#             service-area
+#             environment
+#           soft_fail: false
+#
+#       - name: Post Checkov Results
+#         if: always() && github.event_name == 'pull_request'
+#         uses: actions/github-script@v7
+#         env:
+#           SUMMARY: ${{ steps.checkov.outputs.violations_summary }}
+#           PASSED: ${{ steps.checkov.outputs.passed }}
+#         with:
+#           script: |
+#             const summary = process.env.SUMMARY || '✅ All resources have required tags';
+#             const passed = process.env.PASSED === 'true';
+#             const icon = passed ? '✅' : '⚠️';
+#             github.rest.issues.createComment({
+#               issue_number: context.issue.number,
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               body: `## 🏷️ Checkov Tag Validation ${icon}\n\n${summary}`
+#             });
+#
+#   opa-validate:
+#     ...
+#
+#   ttv-validate:
+#     ...
+# =============================================================================
+
+# =============================================================================
+# EXACT README INSTRUCTIONS (only terraform_directory changed for playground)
+# =============================================================================
 name: Validate Tags
 
 on:
   pull_request:
     paths:
-      - 'environments/**/*.tf'
+      - '**/*.tf'
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  checkov-validate:
-    name: Checkov Tag Validation
+  validate-tags:
+    name: Tag Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: FolarinOyenuga/checkov-tag-validator@v1
-        id: checkov
+      - name: Validate Tags
+        id: validate
+        uses: FolarinOyenuga/checkov-tag-validator@v1
         with:
           terraform_directory: ./environments/tag-test-dev
           required_tags: |
@@ -29,12 +93,12 @@ jobs:
             environment
           soft_fail: false
 
-      - name: Post Checkov Results
+      - name: Post Results to PR
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         env:
-          SUMMARY: ${{ steps.checkov.outputs.violations_summary }}
-          PASSED: ${{ steps.checkov.outputs.passed }}
+          SUMMARY: ${{ steps.validate.outputs.violations_summary }}
+          PASSED: ${{ steps.validate.outputs.passed }}
         with:
           script: |
             const summary = process.env.SUMMARY || '✅ All resources have required tags';
@@ -44,82 +108,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## 🏷️ Checkov Tag Validation ${icon}\n\n${summary}`
-            });
-
-  opa-validate:
-    name: OPA Tag Validation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: FolarinOyenuga/opa-tag-validator@main
-        id: opa
-        with:
-          terraform_directory: ./environments/tag-test-dev
-          required_tags: |
-            business-unit
-            application
-            owner
-            is-production
-            service-area
-            environment
-          soft_fail: false
-
-      - name: Post OPA Results
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        env:
-          SUMMARY: ${{ steps.opa.outputs.violations_summary }}
-          PASSED: ${{ steps.opa.outputs.passed }}
-        with:
-          script: |
-            const summary = process.env.SUMMARY || '✅ All resources have required tags';
-            const passed = process.env.PASSED === 'true';
-            const icon = passed ? '✅' : '⚠️';
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🏷️ OPA Tag Validation ${icon}\n\n${summary}`
-            });
-
-  ttv-validate:
-    name: TTV Tag Validation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ministryofjustice/terraform-tag-validator@main
-        id: ttv
-        env:
-          AWS_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE"
-          AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-          AWS_DEFAULT_REGION: "eu-west-2"
-        with:
-          terraform_directory: ./environments/tag-test-dev
-          required_tags: |
-            business-unit
-            application
-            owner
-            is-production
-            service-area
-            environment
-
-      - name: Post TTV Results
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        env:
-          SUMMARY: ${{ steps.ttv.outputs.violations_summary }}
-          COUNT: ${{ steps.ttv.outputs.violations_count }}
-        with:
-          script: |
-            const summary = process.env.SUMMARY || '✅ All resources have required tags';
-            const count = parseInt(process.env.COUNT || '0', 10);
-            const icon = count === 0 ? '✅' : '⚠️';
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 🏷️ TTV Tag Validation ${icon}\n\n${summary}`
+              body: `## 🏷️ Tag Validation ${icon}\n\n${summary}`
             });
