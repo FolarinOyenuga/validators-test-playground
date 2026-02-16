@@ -4,6 +4,10 @@ terraform {
   # }
 }
 
+# =============================================================================
+# Cloud Platform Pattern: Minimal default_tags at provider level
+# Tags are passed to modules/resources, not set globally
+# =============================================================================
 provider "aws" {
   region = "eu-west-2"
 
@@ -14,14 +18,8 @@ provider "aws" {
 
   default_tags {
     tags = {
-      application            = var.application
-      business-unit          = var.business_unit
-      environment            = var.environment
-      infrastructure-support = var.infrastructure_support
-      is-production          = var.is_production
-      owner                  = var.owner
-      service-area           = var.service_area
-      source-code            = "github.com/FolarinOyenuga/validators-test-playground"
+      source-code   = "github.com/FolarinOyenuga/validators-test-playground"
+      slack-channel = var.slack_channel
     }
   }
 }
@@ -37,14 +35,8 @@ provider "aws" {
 
   default_tags {
     tags = {
-      application            = var.application
-      business-unit          = var.business_unit
-      environment            = var.environment
-      infrastructure-support = var.infrastructure_support
-      is-production          = var.is_production
-      owner                  = var.owner
-      service-area           = var.service_area
-      source-code            = "github.com/FolarinOyenuga/validators-test-playground"
+      source-code   = "github.com/FolarinOyenuga/validators-test-playground"
+      slack-channel = var.slack_channel
     }
   }
 }
