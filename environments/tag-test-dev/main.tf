@@ -16,7 +16,7 @@ provider "aws" {
     tags = {
       application            = var.application
       business-unit          = var.business_unit
-      environment-name       = var.environment
+      environment            = var.environment
       infrastructure-support = var.infrastructure_support
       is-production          = var.is_production
       owner                  = var.owner
@@ -39,7 +39,7 @@ provider "aws" {
     tags = {
       application            = var.application
       business-unit          = var.business_unit
-      environment-name       = var.environment
+      environment            = var.environment
       infrastructure-support = var.infrastructure_support
       is-production          = var.is_production
       owner                  = var.owner
