@@ -1,5 +1,6 @@
 # =============================================================================
 # COMPLIANT RESOURCE - All required tags set at resource level
+# Re-testing with checkov-tag-validator v1.0.1 (whitespace fix)
 # =============================================================================
 resource "aws_s3_bucket" "compliant_bucket" {
   bucket = "tag-test-compliant-bucket-demo"
